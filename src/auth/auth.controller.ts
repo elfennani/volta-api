@@ -2,13 +2,9 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
   HttpException,
   HttpStatus,
   Post,
-  Req,
-  Res,
-  UseGuards,
 } from '@nestjs/common';
 import {
   type SendVerificationCodeDto,
@@ -20,7 +16,6 @@ import {
   type RegisterUserDto,
   registerUserSchema,
 } from './dto/register-user.dto.js';
-import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @Controller('auth')
 export class AuthController {
@@ -41,11 +36,6 @@ export class AuthController {
     } = result;
 
     const lastCodeCreated = await this.authService.getLastCodeTimestamp(phone);
-
-    console.log(differenceInSeconds(new Date(), lastCodeCreated!!));
-
-    console.log('Code date: ', lastCodeCreated);
-    console.log('Curr date: ', new Date());
 
     if (
       !!lastCodeCreated &&
@@ -86,11 +76,5 @@ export class AuthController {
     await this.authService.invalidateCode(code.id);
 
     return this.authService.login(parsed.phone);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get("user")
-  getUser(@Req() req: any) {
-    return req.user;
   }
 }
