@@ -20,7 +20,7 @@ import {
   type RegisterUserDto,
   registerUserSchema,
 } from './dto/register-user.dto.js';
-import { JwtAuthGuard } from './jwt-auth.guard.js';
+import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 
 @Controller('auth')
 export class AuthController {
